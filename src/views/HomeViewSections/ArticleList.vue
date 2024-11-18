@@ -49,14 +49,20 @@
     </div>
   </div>
 
+  {{ auth }} -------
+
+  <button @click="clearAuth()">clear auth</button>
 
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 import { useArticleStore } from '@/stores/article'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const articleStore = useArticleStore()
 
 import AddArticle from './components/AddArticle.vue';
@@ -64,12 +70,16 @@ import AddArticle from './components/AddArticle.vue';
 let for_edit_articles = ref([]);
 let published_articles = ref([]);
 
+let auth = computed(() => localStorage.getItem('user-token'))
+
+function clearAuth() {
+  localStorage.removeItem('user-token');
+  if (!localStorage.getItem('user-token')) {
+    router.push('/login')
+  }
+}
+
 onMounted(() => {
-  // axios.get('https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/article_archintel?status_id=1')
-  //   .then(response => {
-  //     console.log(response.data);
-  //     for_edit_articles.value = response.data;
-  //   });
   getAllForEditArticles()
   getAllPublishedArticles()
 });

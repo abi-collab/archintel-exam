@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/Authentication/Login.vue'
 
+// import { userLoginStore } from '@/stores/login'
+// const loginStore = userLoginStore()
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -24,8 +27,12 @@ const router = createRouter({
 
 export default router
 router.beforeEach((to, from, next) => {
-  // const isAuthenticated = !!localStorage.getItem('user-token'); // or however you store your login state
-  const isAuthenticated = true
-  if (to.name !== 'login' && !isAuthenticated) next({ name: 'login' })
-  else next()
+  const isAuthenticated = !!localStorage.getItem('user-token') // or however you store your login state
+  console.log('isAuthenticated', isAuthenticated)
+
+  if (to.name !== 'login' && !isAuthenticated) {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
 })
