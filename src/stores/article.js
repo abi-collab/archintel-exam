@@ -8,11 +8,13 @@ export const useArticleStore = defineStore('article', () => {
   let uploadedFile = ref()
 
   let addArticleForm = ref({
-    related_company: '',
+    related_company: 1,
     title: '',
     content: '',
     date: '',
     image_data: '',
+    status_id: 1,
+    editor_id: 1,
   })
 
   // Actions

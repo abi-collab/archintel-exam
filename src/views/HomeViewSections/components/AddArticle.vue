@@ -21,8 +21,10 @@
                   <div>
                     <label for="location" class="block text-sm/6 font-medium text-gray-900">Related Company</label>
                     <select id="company" name="company" v-model="articleStore.addArticleForm.related_company"
+                      placeholder="Select Company"
                       class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm/6">
-                      <option v-for="i in companies" :key="i.id" :value="i.id">{{ i.name }}</option>
+                      <option v-for="i in companies" :key="i.id" :value="i.id"
+                        :selected="i.id === articleStore.addArticleForm.related_company">{{ i.name }}</option>
                     </select>
                   </div>
                   <div>
@@ -58,8 +60,20 @@
                         v-model="articleStore.addArticleForm.content" :disabled="false" />
                     </div>
                   </div>
-
-
+                  <div>
+                    <label for="status" class="block text-sm/6 font-medium text-gray-900">Status</label>
+                    <select id="status" name="status" v-model="articleStore.addArticleForm.status_id"
+                      class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm/6">
+                      <option v-for="i in status" :key="i.id" :value="i.id">{{ i.name }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="editor" class="block text-sm/6 font-medium text-gray-900">Editor</label>
+                    <select id="editor" name="editor" v-model="articleStore.addArticleForm.editor_id"
+                      class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm/6">
+                      <option v-for="i in users" :key="i.id" :value="i.id">{{ i.name }}</option>
+                    </select>
+                  </div>
                   <div>
                     <button type="submit"
                       class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add
@@ -67,14 +81,6 @@
                   </div>
                 </form>
               </div>
-
-              <button class="border-2 border-red-700 p-4 rounded"
-                @click="articleStore.save_Upload_File_And_Return_Image_Data">save image</button>
-              <!-- <div class="mt-5 sm:mt-6">
-                <button type="button"
-                  class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  @click="articleStore.isShowAddArticlesModal = false">Go back to dashboard</button>
-              </div> -->
             </DialogPanel>
           </TransitionChild>
         </div>
@@ -94,43 +100,41 @@ import { useArticleStore } from '@/stores/article'
 const articleStore = useArticleStore()
 
 let companies = ref([]);
-// let form = ref({
-//   company: '',
-//   title: '',
-//   content: '',
-//   image: '',
-//   date: new Date(),
-// });
+let status = ref([]);
+let users = ref([]);
 
 onMounted(() => {
+  getAllCompanies()
+  getAllStatus()
+  getAllUsers()
+
+});
+
+function getAllCompanies() {
   axios.get('https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/companies_archintel')
     .then(response => {
-      console.log(response.data);
+      // console.log(response.data);
       companies.value = response.data;
     });
-});
+}
+
+function getAllStatus() {
+  axios.get('https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/status')
+    .then(response => {
+      // console.log(response.data);
+      status.value = response.data;
+    });
+}
+
+function getAllUsers() {
+  axios.get('https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/user')
+    .then(response => {
+      console.log('suers all', response.data);
+      users.value = response.data;
+    });
+}
 
 function saveForm() {
   articleStore.save_Upload_File_And_Return_Image_Data();
 }
-
-// function addArticle() {
-//   axios.post('https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/article_archintel', {
-//     company: form.value.company,
-//     title: form.value.title,
-//     content: form.value.content,
-//     image: form.value.image,
-//     date: form.value.date,
-//   })
-//     .then(response => {
-//       console.log(response.data);
-//       articleStore.isShowAddArticlesModal = false;
-//     });
-// }
-
-// function handleFileUpload(event) {
-//   const file = event.target.files[0];
-//   form.value.image = file;
-// }
-
 </script>
