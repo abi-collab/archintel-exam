@@ -79,9 +79,6 @@
                       Article</button>
                   </div>
                 </form>
-                {{ articleStore.addArticleForm }} -- {{ loginStore.currentUser?.id }}
-                <!-- 
-                <button @click="articleStore.addArticleForm.writer_id = loginStore.currentUser?.id">click</button> -->
               </div>
             </DialogPanel>
           </TransitionChild>

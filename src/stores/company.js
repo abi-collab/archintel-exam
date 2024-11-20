@@ -10,10 +10,13 @@ export const useCompanyStore = defineStore('company', () => {
   let uploadedFile = ref()
   let allCompanies = ref([])
   let addCompanyForm = ref({
+    id: 0,
     name: '',
     logo: '',
     status: 0,
   })
+
+  let isEditMode = ref(false)
 
   // Actions
   // Save uploaded file and return image data
@@ -56,31 +59,50 @@ export const useCompanyStore = defineStore('company', () => {
   }
 
   async function saveCompany() {
+    let url = 'https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/companies_archintel'
+    if (isEditMode.value) {
+      url = `https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/companies_archintel/${addCompanyForm.value.id}`
+      // addCompanyForm.value.companies_archintel_id = addCompanyForm.value.id
+      // addCompanyForm.value = {
+      //   companies_archintel_id: addCompanyForm.value.id,
+      //   name: addCompanyForm.value.name,
+      //   status: addCompanyForm.value.status,
+      // }
+    }
     try {
-      const response = await axios
-        .post(
-          'https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/companies_archintel',
-          addCompanyForm.value,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
-        .then((response) => {
-          console.log('add company response', response)
-          getAllCompanies()
-          LoadingStore.isLoading = false
-          isShowAddCompanyModal.value = false
-          addCompanyForm.value = {
-            name: '',
-            logo: '',
-            status: 0,
-          }
-          return response
-        })
-      console.log(response)
-      return response
+      if (isEditMode.value) {
+        const response = await axios.patch(url, addCompanyForm.value)
+        console.log('update company response', response)
+        getAllCompanies()
+        LoadingStore.isLoading = false
+        isShowAddCompanyModal.value = false
+      } else {
+        const response = await axios.post(url, addCompanyForm.value)
+        console.log('add company response', response)
+        getAllCompanies()
+        LoadingStore.isLoading = false
+        isShowAddCompanyModal.value = false
+      }
+      // const response = await axios
+      //   .post(url, addCompanyForm.value, {
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data',
+      //     },
+      //   })
+      //   .then((response) => {
+      //     console.log('add company response', response)
+      //     getAllCompanies()
+      //     LoadingStore.isLoading = false
+      //     isShowAddCompanyModal.value = false
+      //     addCompanyForm.value = {
+      //       name: '',
+      //       logo: '',
+      //       status: 0,
+      //     }
+      //     return response
+      //   })
+      // console.log(response)
+      // return response
     } catch (error) {
       console.log(error.response ? error.response.data : error.message)
       throw error
@@ -97,5 +119,7 @@ export const useCompanyStore = defineStore('company', () => {
     uploadedFile,
     addCompanyForm,
     allCompanies,
+    isEditMode,
+    saveCompany,
   }
 })
