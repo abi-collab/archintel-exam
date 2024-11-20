@@ -70,7 +70,7 @@
                     <label for="editor" class="block text-sm/6 font-medium text-gray-900">Editor</label>
                     <select id="editor" name="editor" v-model="articleStore.addArticleForm.editor_id"
                       class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm/6">
-                      <option v-for="i in users" :key="i.id" :value="i.id">{{ i.name }}</option>
+                      <option v-for="i in loginStore.allUsers" :key="i.id" :value="i.id">{{ i.name }}</option>
                     </select>
                   </div>
                   <div>
@@ -79,7 +79,9 @@
                       Article</button>
                   </div>
                 </form>
-                {{ articleStore.addArticleForm }}
+                {{ articleStore.addArticleForm }} -- {{ loginStore.currentUser?.id }}
+                <!-- 
+                <button @click="articleStore.addArticleForm.writer_id = loginStore.currentUser?.id">click</button> -->
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -95,18 +97,19 @@ import axios from 'axios';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import Editor from '@tinymce/tinymce-vue';
 import UploadFile from '@/components/Upload/index.vue';
+import { userLoginStore } from '@/stores/login';
 
 import { useArticleStore } from '@/stores/article'
 const articleStore = useArticleStore()
 
+const loginStore = userLoginStore();
+
 let companies = ref([]);
 let status = ref([]);
-let users = ref([]);
 
 onMounted(() => {
   getAllCompanies()
   getAllStatus()
-  getAllUsers()
 
 });
 
@@ -126,15 +129,9 @@ function getAllStatus() {
     });
 }
 
-function getAllUsers() {
-  axios.get('https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/user')
-    .then(response => {
-      console.log('suers all', response.data);
-      users.value = response.data;
-    });
-}
 
 function saveForm() {
+  articleStore.addArticleForm.writer_id = loginStore.currentUser.id;
   articleStore.save_Upload_File_And_Return_Image_Data();
 }
 </script>

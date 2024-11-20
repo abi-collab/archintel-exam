@@ -4,8 +4,8 @@
     :style="'background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url(' + articleImage + '); background-position: center; background-size: cover;'">
     <div class="max-w-7xl mx-auto grid place-items-center h-[250px]">
       <h1
-        class="text-white font-bold uppercase text-4xl md:text-7xl HeaderText tracking-wider text-center applyTextShadow">
-        Archintel Articles
+        class="text-white font-bold capitalize text-4xl md:text-7xl HeaderText tracking-wider text-center applyTextShadow">
+        Articles
       </h1>
     </div>
   </div>
