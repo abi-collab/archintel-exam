@@ -40,6 +40,15 @@
                     </div>
                   </div>
                   <div>
+                    <label for="user_type" class="block text-sm/6 font-medium text-gray-900">User Type</label>
+                    <select id="user_type" name="user_type" placeholder="Select Company"
+                      v-model="userStore.addUserForm.user_type_id"
+                      class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm/6">
+                      <option selected value="1">Writer</option>
+                      <option value="2">Editor</option>
+                    </select>
+                  </div>
+                  <div>
                     <label for="password" class="block text-sm font-semibold text-gray-700">Password</label>
                     <div class="mt-1">
                       <input type="password" name="password" id="password" autocomplete="password" required

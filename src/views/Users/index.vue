@@ -19,7 +19,7 @@
           </p>
           <p class="mt-1 truncate text-xs/5 text-gray-500">{{ moment(user.created_at).format('ll') }}</p>
           <div class="mt-1 truncate text-xs/5 text-gray-500 capitalize">
-            {{ user.status }}
+            {{ returnLocalStatus(user.status) }}
           </div>
         </div>
         <button class="hidden group-hover:block p-3 capitalize text-gray-400 border hover:bg-gray-200"
@@ -48,6 +48,23 @@ function getUserType(userType) {
   }
 }
 
+function returnLocalStatus(status) {
+  switch (status) {
+    case 1:
+    case '1':
+    case 'active':
+      return 'Active';
+    case 2:
+    case '2':
+    case 'inactive':
+      return 'Inactive';
+    case 3:
+      return 'Pending';
+    default:
+      return 'Unknown';
+  }
+}
+
 function editUser(data) {
   userStore.isShowAddUserModal = true;
   userStore.isEditMode = true;
@@ -57,6 +74,7 @@ function editUser(data) {
     name: data.name,
     status: data.status,
     email: data.email,
+    user_type_id: data.user_type_id,
     password: data.password
   }
 }
@@ -69,6 +87,7 @@ function addUser() {
     name: '',
     status: 1,
     email: '',
+    user_type_id: 1,
     password: ''
   }
 }

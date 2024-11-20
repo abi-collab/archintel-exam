@@ -78,6 +78,7 @@
                       class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add
                       Article</button>
                   </div>
+                  {{ articleStore.addArticleForm }}
                 </form>
               </div>
             </DialogPanel>
@@ -95,11 +96,12 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } fro
 import Editor from '@tinymce/tinymce-vue';
 import UploadFile from '@/components/Upload/index.vue';
 import { userLoginStore } from '@/stores/login';
-
+import { useLoadingStore } from '@/stores/loading'
 import { useArticleStore } from '@/stores/article'
 const articleStore = useArticleStore()
 
 const loginStore = userLoginStore();
+const loadingStore = useLoadingStore()
 
 let companies = ref([]);
 let status = ref([]);
@@ -127,8 +129,19 @@ function getAllStatus() {
 }
 
 
+// function saveForm() {
+//   articleStore.addArticleForm.writer_id = loginStore.currentUser.id;
+//   articleStore.save_Upload_File_And_Return_Image_Data();
+// }
+
 function saveForm() {
   articleStore.addArticleForm.writer_id = loginStore.currentUser.id;
-  articleStore.save_Upload_File_And_Return_Image_Data();
+  loadingStore.isLoading = true;
+  articleStore.isShowAddArticlesModal = false;
+  if (articleStore.isEditMode && articleStore.uploadedFile === null) {
+    articleStore.saveArticle();
+  } else {
+    articleStore.save_Upload_File_And_Return_Image_Data();
+  }
 }
 </script>

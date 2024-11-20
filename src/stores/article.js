@@ -1,7 +1,8 @@
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { userLoginStore } from './login'
+import { useLoadingStore } from '@/stores/loading'
 
 export const useArticleStore = defineStore('article', () => {
   //Articles
@@ -9,9 +10,13 @@ export const useArticleStore = defineStore('article', () => {
   let uploadedFile = ref()
 
   const useUserLoginStore = userLoginStore()
+  const LoadingStore = useLoadingStore()
+
+  let isEditMode = ref(false)
 
   let addArticleForm = ref({
-    related_company: 1,
+    id: 0,
+    related_Article: 1,
     title: '',
     content: '',
     date: '',
@@ -20,6 +25,9 @@ export const useArticleStore = defineStore('article', () => {
     editor_id: 0,
     writer_id: useUserLoginStore.currentUser?.id || 0,
   })
+
+  let published_articles = ref([])
+  let forEdit_articles = ref([])
 
   // Actions
   // Save uploaded file and return image data
@@ -48,29 +56,55 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
+  function getAllPublishedArticles() {
+    axios
+      .get('https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/article_archintel?status_id=2')
+      .then((response) => {
+        console.log('published articles in store', response.data)
+        published_articles.value = response.data
+      })
+  }
+
+  function getAllForEditArticles() {
+    axios
+      .get('https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/article_archintel?status_id=1')
+      .then((response) => {
+        console.log('for Edit articles in store', response.data)
+        forEdit_articles.value = response.data
+      })
+  }
+
   async function saveArticle() {
+    let url = 'https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/article_archintel'
+    if (isEditMode.value) {
+      url = `https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/article_archintel/${addArticleForm.value.id}`
+    }
     try {
-      const response = await axios
-        .post(
-          'https://x8ki-letl-twmt.n7.xano.io/api:5GzsPbbs/article_archintel',
-          addArticleForm.value,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
-        .then((response) => {
-          console.log('add article response', response)
-          return response
-        })
-      console.log(response)
-      return response
+      if (isEditMode.value) {
+        const response = await axios.patch(url, addArticleForm.value)
+        console.log('update Article response', response)
+        getAllPublishedArticles()
+        getAllForEditArticles()
+        LoadingStore.isLoading = false
+        isShowAddArticlesModal.value = false
+      } else {
+        const response = await axios.post(url, addArticleForm.value)
+        console.log('add Article response', response)
+        getAllPublishedArticles()
+        getAllForEditArticles()
+        LoadingStore.isLoading = false
+        isShowAddArticlesModal.value = false
+      }
     } catch (error) {
       console.log(error.response ? error.response.data : error.message)
       throw error
     }
   }
+
+  onMounted(() => {
+    getAllPublishedArticles()
+    getAllForEditArticles()
+  })
 
   return {
     //States
@@ -80,5 +114,7 @@ export const useArticleStore = defineStore('article', () => {
 
     //Retun Actions
     save_Upload_File_And_Return_Image_Data,
+    published_articles,
+    forEdit_articles,
   }
 })

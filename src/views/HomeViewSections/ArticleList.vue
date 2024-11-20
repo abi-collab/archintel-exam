@@ -3,8 +3,7 @@
   <div class="max-w-5xl mx-auto">
     <div class="text-lg flex justify-end mb-12">
       <!-- <span>All Articles</span> -->
-      <button class="border rounded py-2 px-4 text-sm bg-blue-500 text-white"
-        @click="articleStore.isShowAddArticlesModal = true">Add
+      <button class="border rounded py-2 px-4 text-sm bg-blue-500 text-white" @click="Add()">Add
         Article</button>
     </div>
 
@@ -37,5 +36,16 @@ import Published from './components/Published/index.vue';
 let isEdit = ref(false);
 function toggleComponent(editMode) {
   isEdit.value = editMode
+}
+
+function Add() {
+  articleStore.isShowAddArticlesModal = true;
+  articleStore.addArticleForm = {
+    title: '',
+    content: '',
+    user_id: '',
+    status: '',
+    image: ''
+  }
 }
 </script>

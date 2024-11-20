@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', () => {
     password: null,
     // role: 0,
     // magic_link: null,
-    // user_type_id: 0,
+    user_type_id: 0,
     status: '',
   })
 
