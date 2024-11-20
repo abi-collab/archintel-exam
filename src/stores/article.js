@@ -1,11 +1,14 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { userLoginStore } from './login'
 
 export const useArticleStore = defineStore('article', () => {
   //Articles
   let isShowAddArticlesModal = ref(false)
   let uploadedFile = ref()
+
+  const useUserLoginStore = userLoginStore()
 
   let addArticleForm = ref({
     related_company: 1,
@@ -13,8 +16,9 @@ export const useArticleStore = defineStore('article', () => {
     content: '',
     date: '',
     image_data: '',
-    status_id: 1,
-    editor_id: 1,
+    status_id: 0,
+    editor_id: 0,
+    writer_id: useUserLoginStore.currentUser?.id || 0,
   })
 
   // Actions

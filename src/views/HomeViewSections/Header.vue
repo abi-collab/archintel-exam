@@ -1,12 +1,23 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="bg-gray-900 py-24 sm:py-32">
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl lg:mx-0">
-        <h2 class="text-5xl font-semibold tracking-tight text-white sm:text-7xl">Archintel Articles</h2>
-        <p class="mt-8 text-pretty text-lg text-gray-400 sm:text-xl/8">Anim aute id magna aliqua ad ad non
-          deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat.</p>
-      </div>
+  <div class="bg-[#B38339] w-full"
+    :style="'background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url(' + articleImage + '); background-position: center; background-size: cover;'">
+    <div class="max-w-7xl mx-auto grid place-items-center h-[250px]">
+      <h1
+        class="text-white font-bold uppercase text-4xl md:text-7xl HeaderText tracking-wider text-center applyTextShadow">
+        Archintel Articles
+      </h1>
     </div>
   </div>
 </template>
+
+<script setup>
+import articleImage from '@/assets/images/article.jpg';
+
+</script>
+
+<style scoped>
+.applyTextShadow {
+  text-shadow: 2px 3px 10px black;
+}
+</style>

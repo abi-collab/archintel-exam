@@ -48,7 +48,6 @@
                       <vue-tailwind-datepicker v-model="articleStore.addArticleForm.date" as-single />
                     </div>
                   </div>
-
                   <div>
                     <label for="description" class="block text-sm font-semibold text-gray-700">Content</label>
                     <div class="mt-1">
@@ -80,6 +79,7 @@
                       Article</button>
                   </div>
                 </form>
+                {{ articleStore.addArticleForm }}
               </div>
             </DialogPanel>
           </TransitionChild>

@@ -54,7 +54,6 @@
         </form>
       </div>
     </div>
-    {{ loginStore.currentUser }}
   </div>
 </template>
 

@@ -15,6 +15,11 @@ export const userLoginStore = defineStore('login', () => {
 
   let authToken = ref('')
 
+  if (localStorage.getItem('user-token')) {
+    authToken.value = localStorage.getItem('user-token')
+    login()
+  }
+
   async function login() {
     try {
       const response = await axios.post(
